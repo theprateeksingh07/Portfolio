@@ -26,3 +26,7 @@ dist-ssr
 
 backup/
 .env
+public/demo.mp4
+*.mp4
+*.mkv
+*.webm

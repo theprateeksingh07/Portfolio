@@ -1,7 +1,8 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
 import "./styles/Work.css";
 import WorkImage from "./WorkImage";
-import { MdArrowBack, MdArrowForward } from "react-icons/md";
+import { MdArrowBack, MdArrowForward, MdPlayCircleOutline, MdClose } from "react-icons/md";
 
 const projects = [
   {
@@ -33,6 +34,23 @@ const projects = [
 const Work = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isVideoOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isVideoOpen]);
 
   const goToSlide = useCallback(
     (index: number) => {
@@ -134,8 +152,59 @@ const Work = () => {
           </div>
         </div>
       </div>
+
+      {/* Featured Project Sidebar */}
+      <div className="work-sidebar">
+        <div className="featured-card">
+          <div>
+            <span className="featured-badge">Featured Project</span>
+          </div>
+          <h3>PC Gesture Control</h3>
+          <p className="featured-category">Native App</p>
+          <p className="featured-description">
+            A software-only solution to control your PC mouse using hand gestures via a webcam. Built with Python, OpenCV, and MediaPipe.
+          </p>
+          <div className="featured-tools">
+            <span>Tools & Tech</span>
+            <p>Python, OpenCV, MediaPipe</p>
+          </div>
+          <button
+            onClick={() => setIsVideoOpen(true)}
+            className="featured-demo-btn"
+            data-cursor="disable"
+          >
+            <MdPlayCircleOutline className="demo-play-icon" />
+            View DEMO
+          </button>
+        </div>
+      </div>
     </div>
   </div>
+
+  {/* Render the modal globally to avoid strict positioning contexts */}
+  {mounted && createPortal(
+    <div className={`video-modal-overlay ${isVideoOpen ? "open" : ""}`} onClick={() => setIsVideoOpen(false)}>
+      <button className="video-modal-close" onClick={() => setIsVideoOpen(false)} aria-label="Close modal">
+        <MdClose />
+      </button>
+      <div className={`video-modal-content ${isVideoOpen ? "open" : ""}`} onClick={(e) => e.stopPropagation()}>
+        <div className="mobile-notch"></div>
+        {isVideoOpen && (
+          <video 
+            className="demo-video-player"
+            src="/demo.mp4" 
+            controls 
+            autoPlay
+            playsInline
+          >
+            Your browser does not support the video tag.
+          </video>
+        )}
+        <div className="mobile-home-bar"></div>
+      </div>
+    </div>,
+    document.body
+  )}
 </div>
   );
 };
