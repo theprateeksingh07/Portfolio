@@ -30,17 +30,6 @@ const projects = [
   },
 ];
 
-const gestureSection = {
-  title: "3D Gesture Game",
-  subtitle: "Choose Elements:",
-  elements: [
-    "Nexura Solar System",
-    "Environment",
-    "Interactable Objects",
-    "Gesture Controller",
-  ],
-};
-
 const Work = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -66,14 +55,6 @@ const Work = () => {
       currentIndex === projects.length - 1 ? 0 : currentIndex + 1;
     goToSlide(newIndex);
   }, [currentIndex, goToSlide]);
-
-  const handleGameClick = (element: string) => {
-    const slug = element
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^a-z0-9-]/g, "");
-    window.open(`${window.location.origin}?game=${slug}`, "_blank");
-  };
 
   return (
     <div className="work-section" id="work">
@@ -153,25 +134,6 @@ const Work = () => {
           </div>
         </div>
       </div>
-      <aside className="work-sidebar">
-        <div className="gesture-card">
-          <h3>{gestureSection.title}</h3>
-          <p className="gesture-subtitle">{gestureSection.subtitle}</p>
-          <div className="gesture-elements">
-            {gestureSection.elements.map((element, index) => (
-              <button
-                type="button"
-                className="gesture-element-button"
-                key={index}
-                onClick={() => handleGameClick(element)}
-              >
-                <span className="gesture-element-label">Name {index + 1}:</span>
-                <span className="gesture-element-value">{element}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </aside>
     </div>
   </div>
 </div>
