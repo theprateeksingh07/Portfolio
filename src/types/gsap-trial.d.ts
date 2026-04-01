@@ -1,4 +1,4 @@
-declare module "gsap-trial/SplitText" {
+declare module "gsap/SplitText" {
   import { Plugin } from "gsap";
   export const SplitText: Plugin;
   export default SplitText;
